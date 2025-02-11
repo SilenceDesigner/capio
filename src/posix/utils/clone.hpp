@@ -43,7 +43,7 @@ inline void init_process(pid_t tid) {
 
     syscall_no_intercept_flag = true;
 
-    auto name = SHM_COMM_CHAN_NAME_RESP + std::to_string(tid);
+    auto name = std::string(SHM_COMM_CHAN_NAME_RESP) + std::to_string(tid);
     LOG("Allocating new circular buffer with name: %s", name.c_str());
     auto *p_buf_response =
         new CircularBuffer<capio_off64_t>(name, CAPIO_REQ_BUFF_CNT, sizeof(capio_off64_t));
