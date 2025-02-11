@@ -7,7 +7,7 @@ set(TARGET_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/capio_server.cpp
 )
 
-add_compile_options(-Wno-unknown-escape-sequence)
+add_compile_options(-Wno-unicode)
 
 #####################################
 # External projects
