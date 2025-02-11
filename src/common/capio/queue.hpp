@@ -18,7 +18,6 @@
  * @tparam Mutex Type of semaphore
  */
 template <class T, class Mutex> class Queue {
-  private:
     void *_shm;
     const long int _max_num_elems, _elem_size; // elements size in bytes
     long int _buff_size;                       // buffer size in bytes

@@ -1,6 +1,8 @@
 #ifndef CAPIO_SEMS_HPP
 #define CAPIO_SEMS_HPP
 
+#include "queue.hpp"
+
 #include <semaphore.h>
 
 #include <utility>
@@ -39,8 +41,8 @@ class NamedSemaphore {
     bool _require_cleanup;
 
   public:
-    NamedSemaphore(std::string name, unsigned int init_value, bool cleanup = true)
-        : _name(std::move(name)), _require_cleanup(cleanup) {
+    NamedSemaphore(const std::string &name, unsigned int init_value, bool cleanup = true)
+        : _name(name), _require_cleanup(cleanup) {
         START_LOG(capio_syscall(SYS_gettid), " call(name=%s, init_value=%d, cleanup=%s)",
                   _name.c_str(), init_value, _require_cleanup ? "true" : "false");
 #ifdef __CAPIO_POSIX
@@ -106,7 +108,7 @@ class NamedSemaphore {
 };
 
 /**
- * @brief C++20 backport of std::semaphore
+ * @brief C++20 bac::NamedSemaphore *rnamed_semaphore:semaphore
  *
  */
 class Semaphore {

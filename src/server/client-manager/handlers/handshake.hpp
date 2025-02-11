@@ -14,8 +14,8 @@
 inline void handshake_handler(const char *const str) {
     pid_t pid;
     char app_name[1024];
-    sscanf(str, "%ld %s", &pid, app_name);
-    START_LOG(gettid(), "call(tid=%ld, pid=%ld, app_name=%s)", pid, app_name);
+    sscanf(str, "%d %s", &pid, app_name);
+    START_LOG(gettid(), "call(tid=%ld, app_name=%s)", pid, app_name);
     client_manager->register_client(app_name, pid);
     storage_service->register_client(app_name, pid);
 }
