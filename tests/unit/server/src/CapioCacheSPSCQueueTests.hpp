@@ -30,10 +30,11 @@ void init_server_data_structures() {
     buf_requests =
         new CircularBuffer<char>(SHM_COMM_CHAN_NAME, CAPIO_REQ_BUFF_CNT, CAPIO_REQ_MAX_SIZE);
 
-    auto tid = gettid();
-    bufs_response->insert(std::make_pair(
-        tid, new CircularBuffer<capio_off64_t>(SHM_COMM_CHAN_NAME_RESP + std::to_string(tid),
-                                               CAPIO_REQ_BUFF_CNT, sizeof(capio_off64_t))));
+    auto tid       = gettid();
+    auto buff_name = SHM_COMM_CHAN_NAME_RESP + std::to_string(tid);
+    bufs_response->insert(
+        std::make_pair(tid, new CircularBuffer<capio_off64_t>(buff_name.c_str(), CAPIO_REQ_BUFF_CNT,
+                                                              sizeof(capio_off64_t))));
 }
 
 void delete_server_data_structures() {
