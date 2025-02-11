@@ -39,7 +39,10 @@ inline void init_threading_support() {
 }
 
 inline void init_process(pid_t tid) {
-    START_LOG(syscall_no_intercept(SYS_gettid), "call(tid=%ld)", tid);
+    const char *capio_app_name = get_capio_app_name();
+
+    START_LOG(syscall_no_intercept(SYS_gettid), "call(tid=%ld, capio_app_name=%s)", tid,
+              capio_app_name);
 
     char name[30] = {'\0'};
     LOG("allocated space to store shared mem name");
@@ -47,16 +50,11 @@ inline void init_process(pid_t tid) {
 
     LOG("Allocating new circular buffer with name: %s", name);
 
-    syscall_no_intercept_flag = true;
-
     auto *p_buf_response =
         new CircularBuffer<capio_off64_t>(name, CAPIO_REQ_BUFF_CNT, sizeof(capio_off64_t));
     bufs_response->insert(std::make_pair(tid, p_buf_response));
 
-    LOG("Created request response buffer with name: %s",
-        (SHM_COMM_CHAN_NAME_RESP + std::to_string(tid)).c_str());
-
-    const char *capio_app_name = get_capio_app_name();
+    LOG("Created request response buffer with name: %s", name);
 
     /**
      * The previous if, for an anonymous handshake was present, however the get_capio_app_name()
@@ -64,8 +62,6 @@ inline void init_process(pid_t tid) {
      * handshake_anonymous_request() useless
      */
     handshake_request(tid, capio_app_name);
-
-    syscall_no_intercept_flag = false;
 }
 
 inline void hook_clone_child() {
