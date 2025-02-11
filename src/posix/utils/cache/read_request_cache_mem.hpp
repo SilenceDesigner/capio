@@ -24,8 +24,7 @@ class ReadRequestCacheMEM {
     }
 
   protected:
-    [[nodiscard]] capio_off64_t read_request(const int fd, const capio_off64_t count,
-                                             const long tid) {
+    capio_off64_t read_request(const int fd, const capio_off64_t count, const long tid) {
         START_LOG(capio_syscall(SYS_gettid), "call(fd=%ld, count=%llu, tid=%ld)", fd, count, tid);
         char req[CAPIO_REQ_MAX_SIZE];
 

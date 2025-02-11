@@ -29,7 +29,7 @@ class ReadRequestCacheFS {
 
     ~ReadRequestCacheFS() { delete available_read_cache; };
 
-    void read_request(std::filesystem::path path, long end_of_read, int tid, int fd) {
+    void read_request(std::filesystem::path path, capio_off64_t end_of_read, int tid, int fd) {
         START_LOG(capio_syscall(SYS_gettid), "[cache] call(path=%s, end_of_read=%ld, tid=%ld)",
                   path.c_str(), end_of_read, tid);
         if (fd != current_fd || path.compare(current_path) != 0) {
