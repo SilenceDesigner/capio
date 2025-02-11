@@ -68,8 +68,8 @@ template <class T, class Mutex> class Queue {
 #ifdef __CAPIO_POSIX
         syscall_no_intercept_flag = true;
 #endif
-        _first_elem = (long int *) create_shm(_first_elem_name, sizeof(long int));
-        _last_elem  = (long int *) create_shm(_last_elem_name, sizeof(long int));
+        _first_elem = static_cast<long int *>(create_shm(_first_elem_name, sizeof(long int)));
+        _last_elem  = static_cast<long int *>(create_shm(_last_elem_name, sizeof(long int)));
         _shm        = get_shm_if_exist(_shm_name);
         if (_shm == nullptr) {
             *_first_elem = 0;
