@@ -36,15 +36,17 @@ class NoLock {
  */
 class NamedSemaphore {
   private:
-    const std::string _name;
+    std::string _name;
     sem_t *_sem;
     bool _require_cleanup;
 
   public:
-    NamedSemaphore(const std::string &name, unsigned int init_value, bool cleanup = true)
-        : _name(name), _require_cleanup(cleanup) {
+    NamedSemaphore(const std::string name, const unsigned int init_value,
+                   const bool cleanup = true) {
         START_LOG(capio_syscall(SYS_gettid), " call(name=%s, init_value=%d, cleanup=%s)",
-                  _name.c_str(), init_value, _require_cleanup ? "true" : "false");
+                  name.c_str(), init_value, cleanup ? "true" : "false");
+        _name            = name;
+        _require_cleanup = cleanup;
 #ifdef __CAPIO_POSIX
         syscall_no_intercept_flag = true;
 #endif
