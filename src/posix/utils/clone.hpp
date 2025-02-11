@@ -52,9 +52,11 @@ inline void init_process(pid_t tid) {
 
     auto *p_buf_response =
         new CircularBuffer<capio_off64_t>(name, CAPIO_REQ_BUFF_CNT, sizeof(capio_off64_t));
+    LOG("Created request response buffer with name: %s", name);
+
     bufs_response->insert(std::make_pair(tid, p_buf_response));
 
-    LOG("Created request response buffer with name: %s", name);
+    LOG("Inserted %s into buf_response map", name);
 
     /**
      * The previous if, for an anonymous handshake was present, however the get_capio_app_name()
