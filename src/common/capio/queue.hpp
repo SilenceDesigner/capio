@@ -62,7 +62,7 @@ template <class T, class Mutex> class Queue {
         START_LOG(capio_syscall(SYS_gettid),
                   "call(shm_name=%s, _max_num_elems=%ld, elem_size=%ld, "
                   "workflow_name=%s, cleanup=%s)",
-                  shm_name.data(), max_num_elems, elem_size, workflow_name.data(),
+                  shm_name, max_num_elems, elem_size, workflow_name.data(),
                   cleanup ? "yes" : "no");
 
 #ifdef __CAPIO_POSIX

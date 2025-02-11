@@ -52,11 +52,13 @@ class CapioStorageService {
 
     void register_client(const std::string &app_name, const pid_t pid) const {
         START_LOG(gettid(), "call(app_name=%s)", app_name.c_str());
+        auto cts_name = "queue-" + std::to_string(pid) + ".cts";
+        auto stc_name = "queue-" + std::to_string(pid) + ".stc";
         _client_to_server_queue->emplace(
-            pid, new SPSCQueue("queue-" + std::to_string(pid) + +".cts", CAPIO_MAX_SPSQUEUE_ELEMS,
+            pid, new SPSCQueue(cts_name.c_str(), CAPIO_MAX_SPSQUEUE_ELEMS,
                                CAPIO_MAX_SPSCQUEUE_ELEM_SIZE, get_capio_workflow_name(), false));
         _server_to_clien_queue->emplace(
-            pid, new SPSCQueue("queue-" + std::to_string(pid) + +".stc", CAPIO_MAX_SPSQUEUE_ELEMS,
+            pid, new SPSCQueue(stc_name.c_str(), CAPIO_MAX_SPSQUEUE_ELEMS,
                                CAPIO_MAX_SPSCQUEUE_ELEM_SIZE, get_capio_workflow_name(), false));
         LOG("Created communication queues");
     }
