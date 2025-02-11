@@ -37,11 +37,11 @@ inline void init_client() {
  * @param pid
  * @param app_name
  */
-inline void handshake_request(const long tid, const long pid, const std::string &app_name) {
-    START_LOG(capio_syscall(SYS_gettid), "call(tid=%ld, pid=%ld, app_name=%s)", tid, pid,
+inline void handshake_request(const long tid, const std::string &app_name) {
+    START_LOG(capio_syscall(SYS_gettid), "call(tid=%ld, pid=%ld, app_name=%s)", tid,
               app_name.c_str());
     char req[CAPIO_REQ_MAX_SIZE];
-    sprintf(req, "%04d %ld %ld %s", CAPIO_REQUEST_HANDSHAKE, tid, pid, app_name.c_str());
+    sprintf(req, "%04d %ld %s", CAPIO_REQUEST_HANDSHAKE, tid, app_name.c_str());
     buf_requests->write(req, CAPIO_REQ_MAX_SIZE);
     LOG("Sent handshake request");
 

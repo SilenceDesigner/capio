@@ -12,12 +12,12 @@
  * (first parameter of the request)
  */
 inline void handshake_handler(const char *const str) {
-    pid_t tid, pid;
+    pid_t pid;
     char app_name[1024];
-    sscanf(str, "%d %d %s", &tid, &pid, app_name);
-    START_LOG(gettid(), "call(tid=%ld, pid=%ld, app_name=%s)", tid, pid, app_name);
-    client_manager->register_client(app_name, tid);
-    storage_service->register_client(app_name, tid);
+    sscanf(str, "%ld %s", &pid, app_name);
+    START_LOG(gettid(), "call(tid=%ld, pid=%ld, app_name=%s)", pid, app_name);
+    client_manager->register_client(app_name, pid);
+    storage_service->register_client(app_name, pid);
 }
 
 #endif // HANDSHAKE_HPP

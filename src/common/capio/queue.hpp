@@ -23,8 +23,8 @@ template <class T, class Mutex> class Queue {
     const long int _max_num_elems, _elem_size; // elements size in bytes
     long int _buff_size;                       // buffer size in bytes
     long int *_first_elem = nullptr, *_last_elem = nullptr;
-    const std::string _shm_name, _first_elem_name, _last_elem_name;
-    bool require_cleanup;
+    std::string _shm_name, _first_elem_name, _last_elem_name;
+    bool _require_cleanup;
     Mutex _mutex;
     NamedSemaphore _sem_num_elems, _sem_num_empty;
 
@@ -56,7 +56,7 @@ template <class T, class Mutex> class Queue {
         : _max_num_elems(max_num_elems), _elem_size(elem_size),
           _buff_size(_max_num_elems * _elem_size), _shm_name(workflow_name + "_" + shm_name),
           _first_elem_name(workflow_name + SHM_FIRST_ELEM + shm_name),
-          _last_elem_name(workflow_name + SHM_LAST_ELEM + shm_name), require_cleanup(cleanup),
+          _last_elem_name(workflow_name + SHM_LAST_ELEM + shm_name), _require_cleanup(cleanup),
           _mutex(workflow_name + SHM_MUTEX_PREFIX + shm_name, 1, cleanup),
           _sem_num_elems(workflow_name + SHM_SEM_ELEMS + shm_name, 0, cleanup),
           _sem_num_empty(workflow_name + SHM_SEM_EMPTY + shm_name, max_num_elems, cleanup) {
@@ -65,6 +65,7 @@ template <class T, class Mutex> class Queue {
                   "workflow_name=%s, cleanup=%s)",
                   shm_name.data(), max_num_elems, elem_size, workflow_name.data(),
                   cleanup ? "yes" : "no");
+
 #ifdef __CAPIO_POSIX
         syscall_no_intercept_flag = true;
 #endif
@@ -87,7 +88,7 @@ template <class T, class Mutex> class Queue {
         START_LOG(capio_syscall(SYS_gettid),
                   "call(_shm_name=%s, _first_elem_name=%s, _last_elem_name=%s)", _shm_name.c_str(),
                   _first_elem_name.c_str(), _last_elem_name.c_str());
-        if (require_cleanup) {
+        if (_require_cleanup) {
             LOG("Performing cleanup of allocated resources");
 #ifdef __CAPIO_POSIX
             syscall_no_intercept_flag = true;
