@@ -62,7 +62,7 @@ inline std::vector<std::regex> *file_in_memory_request(const long pid) {
     bufs_response->at(pid)->read(&files_to_read_from_queue, sizeof(files_to_read_from_queue));
     LOG("Need to read %llu files from data queues", files_to_read_from_queue);
     const auto regex_vector = new std::vector<std::regex>;
-    for (int i = 0; i < files_to_read_from_queue; i++) {
+    for (capio_off64_t i = 0; i < files_to_read_from_queue; i++) {
         LOG("Reading %d file", i);
         auto file = new char[CAPIO_MAX_SPSCQUEUE_ELEM_SIZE]{};
         stc_queue->read(file, CAPIO_MAX_SPSCQUEUE_ELEM_SIZE);

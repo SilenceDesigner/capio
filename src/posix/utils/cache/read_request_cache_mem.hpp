@@ -74,7 +74,7 @@ class ReadRequestCacheMEM {
         }
     }
 
-    void read(const int fd, void *buffer, off64_t count) {
+    void read(const int fd, void *buffer, capio_off64_t count) {
         START_LOG(capio_syscall(SYS_gettid), "call(fd=%d, count=%ld)", fd, count);
         if (_fd != fd) {
             LOG("changed fd from %d to %d: flushing", _fd, fd);

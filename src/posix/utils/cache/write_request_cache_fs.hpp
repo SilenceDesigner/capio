@@ -3,7 +3,7 @@
 class WriteRequestCacheFS {
 
     int current_fd         = -1;
-    long long current_size = 0;
+    capio_off64_t current_size = 0;
 
     const capio_off64_t _max_size;
 
