@@ -41,10 +41,11 @@ inline void init_threading_support() {
 inline void init_process(pid_t tid) {
     START_LOG(syscall_no_intercept(SYS_gettid), "call(tid=%ld)", tid);
 
-    const std::string string_pid = std::to_string(tid);
-    LOG("computed string tid %s", string_pid.c_str());
+    std::string name(30, '\0');
+    name.reserve(strlen(SHM_COMM_CHAN_NAME_RESP) + 10);
+    LOG("allocated space to store shared mem name");
+    sprintf(name.data(), "%s%d", SHM_COMM_CHAN_NAME_RESP, tid);
 
-    const std::string name(SHM_COMM_CHAN_NAME_RESP + string_pid);
     LOG("Allocating new circular buffer with name: %s", name.c_str());
 
     syscall_no_intercept_flag = true;
