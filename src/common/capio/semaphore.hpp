@@ -41,10 +41,10 @@ class NamedSemaphore {
     bool _require_cleanup;
 
   public:
-    NamedSemaphore(const std::string name, const unsigned int init_value,
+    NamedSemaphore(const std::string &name, const unsigned int init_value,
                    const bool cleanup = true) {
         START_LOG(capio_syscall(SYS_gettid), " call(name=%s, init_value=%d, cleanup=%s)",
-                  name.c_str(), init_value, cleanup ? "true" : "false");
+                  name.c_str(), init_value, cleagitnup ? "true" : "false");
         _name            = name;
         _require_cleanup = cleanup;
 #ifdef __CAPIO_POSIX
