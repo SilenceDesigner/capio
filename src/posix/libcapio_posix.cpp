@@ -314,6 +314,9 @@ static constexpr std::array<CPHandler_t, CAPIO_NR_SYSCALLS> build_syscall_table(
 #ifdef SYS_writev
     _syscallTable[SYS_writev] = writev_handler;
 #endif
+#ifdef SYS_fcntl64
+    _syscallTable[SYS_fcntl64] = fcntl_handler();
+#endif
 
     return _syscallTable;
 }

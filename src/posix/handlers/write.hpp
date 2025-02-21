@@ -1,7 +1,6 @@
 #ifndef CAPIO_POSIX_HANDLERS_WRITE_HPP
 #define CAPIO_POSIX_HANDLERS_WRITE_HPP
 
-#if defined(SYS_write) || defined(SYS_writev)
 
 #include "utils/common.hpp"
 #include "utils/requests.hpp"
@@ -20,6 +19,7 @@ inline off64_t capio_write_mem(int fd, char *buffer, capio_off64_t count, pid_t 
     return 0;
 }
 
+#if defined(SYS_write)
 int write_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long *result) {
     auto fd     = static_cast<int>(arg0);
     auto buffer = reinterpret_cast<char *>(arg1);
@@ -37,7 +37,10 @@ int write_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long ar
 
     return posix_return_value(write_result, result);
 }
+#endif // SYS_write
 
+
+#if defined(SYS_writev)
 int writev_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long *result) {
     auto fd     = static_cast<int>(arg0);
     auto buffer = reinterpret_cast<char *>(arg1);
@@ -55,6 +58,6 @@ int writev_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long a
 
     return posix_return_value(write_result, result);
 }
+#endif //SYS_writev
 
-#endif // SYS_write || SYS_writev
 #endif // CAPIO_POSIX_HANDLERS_WRITE_HPP

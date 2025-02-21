@@ -1,8 +1,7 @@
 #ifndef CAPIO_POSIX_HANDLERS_READ_HPP
 #define CAPIO_POSIX_HANDLERS_READ_HPP
 
-#if defined(SYS_read) || defined(SYS_readv)
-
+#if defined(SYS_read)
 int read_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long *result) {
     int fd     = static_cast<int>(arg0);
     auto count = static_cast<capio_off64_t>(arg2);
@@ -22,7 +21,9 @@ int read_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long arg
     }
     return CAPIO_POSIX_SYSCALL_REQUEST_SKIP;
 }
+#endif // SYS_read
 
+#if defined(SYS_readv)
 int readv_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long *result) {
     auto fd     = static_cast<int>(arg0);
     auto iovcnt = static_cast<int>(arg2);
@@ -37,6 +38,6 @@ int readv_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long ar
     }
     return CAPIO_POSIX_SYSCALL_REQUEST_SKIP;
 }
+#endif // SYS_readv
 
-#endif // SYS_read || SYS_readv
 #endif // CAPIO_POSIX_HANDLERS_READ_HPP
