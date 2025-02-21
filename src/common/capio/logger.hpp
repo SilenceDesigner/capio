@@ -180,7 +180,7 @@ class Logger {
   public:
     inline Logger(const char invoker[], const char file[], int line, long int tid,
                   const char *message, ...) {
-#ifdef __CAPIO_POSIX
+#ifndef __CAPIO_POSIX
         if (!logfile.is_open()) {
             // NOTE: should never get to this point as capio_server opens up the log file while
             // parsing command line arguments. This is only for failsafe purpose
