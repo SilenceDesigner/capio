@@ -180,7 +180,7 @@ class Logger {
   public:
     inline Logger(const char invoker[], const char file[], int line, long int tid,
                   const char *message, ...) {
-#ifndef __CAPIO_POSIX
+#ifdef __CAPIO_POSIX
         if (!logfile.is_open()) {
             // NOTE: should never get to this point as capio_server opens up the log file while
             // parsing command line arguments. This is only for failsafe purpose
@@ -190,12 +190,21 @@ class Logger {
         if (!logfileOpen) {
             setup_posix_log_filename();
             current_log_level = 0; // reset after clone log level, so to not inherit it
-
+#if defined(SYS_mkdir)
             capio_syscall(SYS_mkdir, get_log_dir(), 0755);
             capio_syscall(SYS_mkdir, get_posix_log_dir(), 0755);
             capio_syscall(SYS_mkdir, get_host_log_dir(), 0755);
-
+#else if defined(SYS_mkdirat)
+            capio_syscall(SYS_mkdir, AT_FDCWD, get_log_dir(), 0755);
+            capio_syscall(SYS_mkdir, AT_FDCWD, get_posix_log_dir(), 0755);
+            capio_syscall(SYS_mkdir, AT_FDCWD, get_host_log_dir(), 0755);
+#endif
+#if defined(SYS_open)
             logfileFD = capio_syscall(SYS_open, logfile_path, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+#else if defined(SYS_openat)
+            logfileFD = capio_syscall(SYS_openat, AT_FDCWD, logfile_path,
+                                      O_CREAT | O_WRONLY | O_TRUNC, 0644);
+#endif
 
             if (logfileFD == -1) {
                 capio_syscall(SYS_write, fileno(stdout),
