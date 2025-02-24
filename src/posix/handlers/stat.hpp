@@ -87,7 +87,7 @@ inline int capio_fstatat(int dirfd, const std::string_view &pathname, struct sta
     }
 }
 
-#if defined(SYS_fstat)
+#if defined(SYS_fstat) || defined(SYS_fstat64)
 int fstat_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long *result) {
     auto fd   = static_cast<int>(arg0);
     auto *buf = reinterpret_cast<struct stat *>(arg1);
@@ -95,9 +95,9 @@ int fstat_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long ar
 
     return posix_return_value(capio_fstat(fd, buf, tid), result);
 }
-#endif // SYS_fstat
+#endif // SYS_fstat || SYS_fstat64
 
-#if defined(SYS_fstatat) || defined(SYS_newfstatat)
+#if defined(SYS_fstatat) || defined(SYS_newfstatat) || defined(SYS_fstatat64)
 int fstatat_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5,
                     long *result) {
     auto dirfd = static_cast<int>(arg0);
@@ -108,9 +108,9 @@ int fstatat_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long 
 
     return posix_return_value(capio_fstatat(dirfd, pathname, statbuf, flags, tid), result);
 }
-#endif // SYS_fstatat
+#endif // SYS_fstatat || SYS_newfstatat || SYS_fstatat64
 
-#if defined(SYS_lstat)
+#if defined(SYS_lstat) || defined(SYS_lstat64)
 int lstat_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long *result) {
     const std::string_view pathname(reinterpret_cast<const char *>(arg0));
     auto *buf = reinterpret_cast<struct stat *>(arg1);
@@ -118,9 +118,9 @@ int lstat_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long ar
 
     return posix_return_value(capio_lstat_wrapper(pathname, buf, tid), result);
 }
-#endif // SYS_lstat
+#endif // SYS_lstat || SYS_lstat64
 
-#if defined(SYS_stat)
+#if defined(SYS_stat) || defined(SYS_stat64)
 int stat_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long *result) {
     const std::string_view pathname(reinterpret_cast<const char *>(arg0));
     auto *buf = reinterpret_cast<struct stat *>(arg1);
@@ -128,6 +128,6 @@ int stat_handler(long arg0, long arg1, long arg2, long arg3, long arg4, long arg
 
     return posix_return_value(capio_lstat_wrapper(pathname, buf, tid), result);
 }
-#endif // SYS_stat
+#endif // SYS_stat || SYS_stat64
 
 #endif // CAPIO_POSIX_HANDLERS_STAT_HPP
