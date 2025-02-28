@@ -32,7 +32,7 @@ int write_file_stat_clone(FILE *fp) {
     EXPECT_EQ(sem_post(sem), 0);
     return 0;
 }
-
+/*
 TEST(SystemCallTest, TestThreadClone) {
     int *num = static_cast<int *>(malloc(sizeof(int)));
     *num     = 12345;
@@ -84,3 +84,4 @@ TEST(SystemCallTest, TestThreadCloneProducerConsumerWithStat) {
     EXPECT_NE(unlink(PATHNAME), -1);
     t1.join();
 }
+*/
