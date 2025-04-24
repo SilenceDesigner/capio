@@ -15,7 +15,7 @@ include(ExternalProject)
 #####################################
 ExternalProject_Add(syscall_intercept
         GIT_REPOSITORY git@github.com:alpha-unito/syscall_intercept.git
-        GIT_TAG 784c06f715fff5aa1e6b64357e93c6162b1d164a
+        GIT_TAG 3ef8a802784b7133da973fa40264904dfff158e6
         PREFIX ${CMAKE_CURRENT_BINARY_DIR}
         CMAKE_ARGS
         -DBUILD_TESTS=OFF
